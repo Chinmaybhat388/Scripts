@@ -1,10 +1,14 @@
 cyberark () {
+	RED='\033[31m'
+	GREEN='\033[32m'
+	YELLOW='\033[33m'
+	BLUE='\033[34m'
+	COLOR_OFF='\033[0m'
 	id=`whoami`
 	local action="$1"
 	local hostname="$2"
 	local filename="$3"
 	local targetdir="$4"
-	
 	usage () {
 		echo -e "------------------------------------------------------------"
 		echo -e "Cyberark function can be used to either ${RED}SSH${COLOR_OFF} or ${RED}SCP${COLOR_OFF}."
@@ -42,24 +46,24 @@ cyberark () {
 		usage_ssh
 		break &> /dev/null
 	fi
-	if [[ "${#}" -lt 2 ]] && ([[ $1 == "scp" ]] || [[ $1 == "push" ]] || [[ $1 == "pull" ]])
+	if [[ "${#}" -lt 2 ]] && (
+			[[ $1 == "scp" ]] || [[ $1 == "push" ]] || [[ $1 == "pull" ]]
+		)
 	then
 		usage_scp
 		break &> /dev/null
 	fi
-	
 	local latest_key=$(find /Users/${id}/Downloads/ -name '*key*.openssh*' -mmin -720 -exec stat -f "%B %N" {} \; | sort -n | tail -1 | awk '{$1=""; print substr($0,2)}')
 	local new_filename="/Users/${id}/Downloads/key.openssh"
 	if [[ -e $latest_key ]]
 	then
 		mv "$latest_key" "$new_filename"
 	else
-		echo -e "${RED}Download key from Cyberark portal and retry${COLOR_OFF}"	
-		echo -e "${GREEN}Link${COLOR_OFF} : https://mswebcpasprdw02.lowes.com/PasswordVault/v10/PSM-SSH-MFA-Caching "	
+		echo -e "${RED}Download key from Cyberark portal and retry${COLOR_OFF}"
+		echo -e "${GREEN}Link${COLOR_OFF} : https://mswebcpasprdw02.lowes.com/PasswordVault/v10/PSM-SSH-MFA-Caching "
+		break &> /dev/null
 	fi
-	
 	local keyfile="/Users/${id}/Downloads/key.openssh"
-	
 	if [[ -e $keyfile ]]
 	then
 		chmod 600 $keyfile
@@ -70,7 +74,7 @@ cyberark () {
 		fi
 		if [[ $1 == "ssh" ]]
 		then
-			ssh -o stricthostkeychecking=no -o ConnectTimeout=3 -i $keyfile ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com
+			ssh -o stricthostkeychecking=no -o ConnectTimeout=3 -o stricthostkeychecking=no -o ConnectTimeout=3 -i $keyfile ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com
 		elif [[ $1 == "push" ]]
 		then
 			if [[ -d $3 ]]
@@ -80,8 +84,8 @@ cyberark () {
 				scp -O -i $keyfile $3 ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${4}
 			fi
 		elif [[ $1 == "pull" ]]
-		then 
-		    scp -r -O -i $keyfile ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${3} /Users/${id}/Downloads
+		then
+			scp -r -O -i $keyfile ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${3} /Users/${id}/Downloads
 		fi
 	fi
 }
