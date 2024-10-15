@@ -1,3 +1,5 @@
+#This script logs in to GCP hosts and checks the value specifed for Distributed Consensus Store (ETCD) specified in a yaml configuration file. 
+#This validation had to be done for 350 nodes. The clusters variable is a sample. 
 #!/bin/bash
 
 clusters=("cluster1" "cluster2")
