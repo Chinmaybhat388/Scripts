@@ -1,0 +1,67 @@
+---
+- name: Recreate pgbackrest stanza
+  hosts: dbservers
+  gather_facts: false
+  tasks:
+    - name: Check for /etc/pgbackrest.conf
+      shell:
+       cmd: "ls -lrt /etc/pgbackrest.conf"
+      ignore_errors: true
+      register: config_file_present
+      tags: check_config_file
+
+    - name: List the config file
+      debug:
+       msg={{ config_file_present.stdout_lines }}
+      tags: list_config_file
+
+    - name: Change repo path in the config file
+      lineinfile:
+       path: /etc/pgbackrest.conf
+       search_string: 'repo1-path'
+       line: 'repo1-path=/Postgres_backup/{{ repo }}/pgbackrest'
+      when: config_file_present.rc == 0
+      tags: change_repo_path
+
+    - name: Create the repo directory
+      file:
+       path: /Postgres_backup/{{ repo }}/pgbackrest
+       owner: postgres
+       group: postgres
+       mode: '0750'
+       state: directory
+      tags: create_repo_directory
+
+    - name: Create log directory
+      file:
+       path: /Postgres_backup/{{ repo }}/pgbackrest/logs
+       owner: postgres
+       group: postgres
+       mode: '0750'
+       state: directory
+      tags: create_logs_directory
+
+    - name: Create new pgbackrest stanza
+      shell:
+       cmd: "pgbackrest --stanza=main --log-level-console=info stanza-create"
+      ignore_errors: true
+      become: true
+      become_user: postgres
+      ignore_errors: true
+      register: stanza_creation
+      tags: create_stanza
+
+    - name: Verify stanza
+      shell:
+       cmd: "pgbackrest info"
+      become: true
+      become_user: postgres
+      register: info_op
+      when: stanza_creation.rc == 0
+      tags: verify_stanza
+
+    - name: Return
+      debug:
+       msg={{ info_op.stdout_lines }}
+      when: stanza_creation.rc == 0
+      tags: stanza_verification
