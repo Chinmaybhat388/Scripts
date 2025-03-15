@@ -13,9 +13,9 @@ cyberark () {
 		echo -e "------------------------------------------------------------"
 		echo -e "Cyberark function can be used to either ${RED}SSH${COLOR_OFF} or ${RED}SCP${COLOR_OFF}."
 		echo ""
-		echo -e "Example of SSH: ${GREEN}cyberark ssh lxpgstestdevs03${COLOR_OFF}"
-		echo -e "Example of SCP to remote server : ${GREEN}cyberark push lxpgstestdevs03 <filename/dirname> <target directory>${COLOR_OFF}"
-		echo -e "Example of SCP from remote server : ${GREEN}cyberark pull lxpgstestdevs03 <remote filename/dirname>${COLOR_OFF}  #File will be saved in Downloads"
+		echo -e "Example of SSH: ${GREEN}cyberark ssh lx***********03${COLOR_OFF}"
+		echo -e "Example of SCP to remote server : ${GREEN}cyberark push lx***********03 <filename/dirname> <target directory>${COLOR_OFF}"
+		echo -e "Example of SCP from remote server : ${GREEN}cyberark pull lx***********03 <remote filename/dirname>${COLOR_OFF}  #File will be saved in Downloads"
 		echo -e "------------------------------------------------------------"
 		return 1
 	}
@@ -23,7 +23,7 @@ cyberark () {
 		echo -e "------------------------------------------------------------"
 		echo -e "Needs ${RED}hostname${COLOR_OFF}..."
 		echo ""
-		echo -e "Example : ${GREEN}cyberark ssh lxpgstestdevs03${COLOR_OFF}"
+		echo -e "Example : ${GREEN}cyberark ssh lx***********03${COLOR_OFF}"
 		echo -e "------------------------------------------------------------"
 		return 1
 	}
@@ -31,8 +31,8 @@ cyberark () {
 		echo -e "------------------------------------------------------------"
 		echo -e "Needs ${RED}hostname${COLOR_OFF} , ${RED}filename${COLOR_OFF} and ${RED}target-directory${COLOR_OFF}..."
 		echo ""
-		echo -e "Example of SCP to remote server : ${GREEN}cyberark push lxpgstestdevs03 <filename/dirname> <target directory>${COLOR_OFF}"
-		echo -e "Example of SCP from remote server : ${GREEN}cyberark pull lxpgstestdevs03 <remote filename/dirname>${COLOR_OFF}  #File will be saved in Downloads"
+		echo -e "Example of SCP to remote server : ${GREEN}cyberark push lx***********03 <filename/dirname> <target directory>${COLOR_OFF}"
+		echo -e "Example of SCP from remote server : ${GREEN}cyberark pull lx***********03 <remote filename/dirname>${COLOR_OFF}  #File will be saved in Downloads"
 		echo -e "------------------------------------------------------------"
 		return 1
 	}
@@ -79,13 +79,13 @@ cyberark () {
 		then
 			if [[ -d $3 ]]
 			then
-				scp -r -O -i $keyfile $3 ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${4}
+				scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r -O -i $keyfile $3 ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${4}
 			else
-				scp -O -i $keyfile $3 ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${4}
+				scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -O -i $keyfile $3 ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${4}
 			fi
 		elif [[ $1 == "pull" ]]
 		then
-			scp -r -O -i $keyfile ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${3} /Users/${id}/Downloads
+			scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r -O -i $keyfile ${id}@postgres@${2}.lowes.com@cyberark-psmp.lowes.com:${3} /Users/${id}/Downloads
 		fi
 	fi
 }
