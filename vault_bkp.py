@@ -14,8 +14,8 @@ role_id = 'gAAAAABn0_CB19O3aytVbnN9wP_PEMtG9YpYlC-VTWfHEYIBPuNdrBjbo6dbyDjogcT6J
 secret_id = 'gAAAAABn0_CGWcfo9QKZY6LghUEL2JQSTWAMnKUMvs9s-F9haGBe1CygtsTV25_Db1mq-N1-p6FJP5dlbd4Bb_N6QowCN3hQHcT_Qiu5AUNFJzp9lJAQj12jE8r8h7WI7DgR8V0O52bT'
 
 fernet = Fernet(key)
-decrypted_role_id = fernet.decrypt(encrypted_role_id).decode()
-decrypted_secret_id = fernet.decrypt(encrypted_secret_id).decode()
+decrypted_role_id = fernet.decrypt(role_id).decode()
+decrypted_secret_id = fernet.decrypt(secret_id).decode()
 
 try:
     # Initialize the client
