@@ -9,7 +9,7 @@ HOST=`hostname`
 DT=`date +%d-%b-%Y-%H-%M-%S-%p`
 LOGPATH="/home/postgres/logs/certs"
 LOGFILE=${LOGPATH}/${HOST}_PG_${DT}cert_monitor.log
-MAILADDR="chinmay.kr@lowes.com"
+MAILADDR="email@domain.com"
 PGDATA=`ps -ef | grep bin/postgres | grep -- -D | grep -v grep| grep -v pg_basebackup| grep -v pg_dump | awk '{print $10}'|head -1`
 PGPATH="$(dirname `ps -ef | grep bin/postgres | grep -- -D | grep -v grep | awk '{print $8}'|head -1`)"
 
