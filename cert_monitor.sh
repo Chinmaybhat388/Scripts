@@ -1,5 +1,5 @@
 #This script is to monitor if any client connections are still using older versions of TLS certificates to connect to postgres database.
-#hba entry needed "hostssl    postgres   postgres      172.21.71.30/32    trust clientcert=verify-ca"
+#hba entry needed "hostssl    postgres   postgres      <host_ip>/32    trust clientcert=verify-ca"
 
 
 #!/bin/bash
