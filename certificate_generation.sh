@@ -38,7 +38,7 @@ access_token=$(curl -s --location -k --request POST 'https://auth.sso.xxxxxxx.co
 -H "Content-Type: application/x-www-form-urlencoded" \
 -d "grant_type=client_credentials" \
 -d "client_id=3f3bf203-xxxx-xxxx-xxxx-1ae280addbe8" \
--d "client_secret=xxxxxxx=aNfMhgS92jxxxk]ipgwKrLc7" | jq -r '."access_token"')
+-d "client_secret=xxxxxxx=xxxxxxxxxxxxxxx" | jq -r '."access_token"')
 
 
 #Check if the certificate exists :
@@ -88,7 +88,7 @@ then
       echo "Creating a new certificate."
       printf "\n"
 
-      curl -s -k 'https://admin.enterprise.xxxxxxx.com/api/ssl/v1/enroll-keygen' -i -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer ${access_token}" -H 'customerUri: lowes-prod' -H 'Accept: application/json'  -H 'login: eaprodpers'  -d  '{"orgId":40584,"subjAltNames":"'"${subjAltNames}"'","certType":21842,"term":390,"comments":"Certificate for Postgres cluster","externalRequester":"DL-DIST-Carbon-Postgres@xxxxx.com","customFields":[{"name":"CMDB App ID","value":"92098"}], "commonName":"'"${CLUSTER_NAME}"'","passPhrase":"xxxxx@1234567","keySize":2048,"keyParam":"2048","algorithm":"RSA"}'| sed -n '/{/,/}/p'
+      curl -s -k 'https://admin.enterprise.xxxxxxx.com/api/ssl/v1/enroll-keygen' -i -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer ${access_token}" -H 'customerUri: lowes-prod' -H 'Accept: application/json'  -H 'login: eaprodpers'  -d  '{"orgId":12345,"subjAltNames":"'"${subjAltNames}"'","certType":12345,"term":390,"comments":"Certificate for Postgres cluster","externalRequester":"DL-DIST-Carbon-Postgres@xxxxx.com","customFields":[{"name":"CMDB App ID","value":"12345"}], "commonName":"'"${CLUSTER_NAME}"'","passPhrase":"xxxxxxxxxxx","keySize":xxxx,"keyParam":"2048","algorithm":"RSA"}'| sed -n '/{/,/}/p'
 
       generated_cert_id=$(curl -s "https://cert-manager.com/private/api/ssl/v1?commonName=${CLUSTER_NAME}" -i -X GET -H 'Accept: application/json' -H 'customerUri: lowes-prod' -H "Authorization: Bearer ${access_token}" | sed -n '/{/,/}/p' | jq '.[].sslId' | head -1)
 
@@ -131,7 +131,7 @@ else
   then
     echo "Creating a new certificate."
 
-    curl -s -k 'https://admin.enterprise.sectigo.com/api/ssl/v1/enroll-keygen' -i -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer ${access_token}" -H 'customerUri: lowes-prod' -H 'Accept: application/json'  -H 'login: eaprodpers'  -d  '{"orgId":40584,"subjAltNames":"'"${subjAltNames}"'","certType":21842,"term":390,"comments":"Certificate for Postgres cluster","externalRequester":"DL-DIST-Carbon-Postgres@xxxxx.com","customFields":[{"name":"CMDB App ID","value":"92098"}], "commonName":"'"${CLUSTER_NAME}"'","passPhrase":"xxxxx@1234567","keySize":2048,"keyParam":"2048","algorithm":"RSA"}'| sed -n '/{/,/}/p'
+    curl -s -k 'https://admin.enterprise.sectigo.com/api/ssl/v1/enroll-keygen' -i -X POST -H 'Content-Type: application/json' -H "Authorization: Bearer ${access_token}" -H 'customerUri: lowes-prod' -H 'Accept: application/json'  -H 'login: eaprodpers'  -d  '{"orgId":40584,"subjAltNames":"'"${subjAltNames}"'","certType":12345,"term":390,"comments":"Certificate for Postgres cluster","externalRequester":"DL-DIST-Carbon-Postgres@xxxxx.com","customFields":[{"name":"CMDB App ID","value":"12345"}], "commonName":"'"${CLUSTER_NAME}"'","passPhrase":"xxxxxxxxxxx","keySize":xxxx,"keyParam":"xxxx","algorithm":"RSA"}'| sed -n '/{/,/}/p'
 
     generated_cert_id=$(curl -s "https://cert-manager.com/private/api/ssl/v1?commonName=${CLUSTER_NAME}" -i -X GET -H 'Accept: application/json' -H 'customerUri: lowes-prod' -H "Authorization: Bearer ${access_token}" | sed -n '/{/,/}/p' | jq '.[].sslId')
     echo "Certificates generated : $generated_cert_id"
@@ -142,7 +142,7 @@ else
     echo "server.crt downloaded."
     curl -s -k `curl -s "https://cert-manager.com/private/api/ssl/v1/keystore/${generated_cert_id}/p12aes" -i -X GET -H 'Accept: application/json' -H 'customerUri: lowes-prod' -H "Authorization: Bearer ${access_token}" | sed -n '/Transfer-Encoding: chunked/,$p' | sed '1d' | jq -r '.link'` --output ${CLUSTER_NAME}_certs/${CLUSTER_NAME}.p12
     echo "${CLUSTER_NAME}.p12 file downloaded."
-    openssl pkcs12 -in ${CLUSTER_NAME}_certs/${CLUSTER_NAME}.p12 -out ${CLUSTER_NAME}_certs/server.key -nocerts -nodes -passin pass:"xxxxx@1234567"
+    openssl pkcs12 -in ${CLUSTER_NAME}_certs/${CLUSTER_NAME}.p12 -out ${CLUSTER_NAME}_certs/server.key -nocerts -nodes -passin pass:"xxxxxxxxxxx"
     echo "Converted ${CLUSTER_NAME}.p12 file to server.key"
     chmod 600 ${CLUSTER_NAME}_certs/*
     echo "Downloaded the certificates."
