@@ -3,8 +3,8 @@ LOGFILE="/postgres_log/certificate_lifecycle/cert_renewal.log"
 DB_update_fail_log="/tmp/dbUpdate_fail.log"
 scp_fail_log="/tmp/scp_failed_hosts.log"
 download_fail_log="/tmp/download_failed_certs.log"
-FROM_ADDR="postgres@lowes.com"
-MAILADDR="chinmay.kr@lowes.com"
+FROM_ADDR="postgres@xxxx.com"
+MAILADDR="chinmay.kr@xxxx.com"
 PGPORT=50001
 
 > $DB_update_fail_log
@@ -29,8 +29,8 @@ then
 	access_token=$(curl -s --location -k --request POST 'https://auth.sso.sectigo.com/auth/realms/apiclients/protocol/openid-connect/token' \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-d "grant_type=client_credentials" \
-	-d "client_id=3f3bf203-aa91-44f0-a204-1ae280addbe8" \
-	-d "client_secret=hfNhai6=aNfMhgS92jYYZk]ipgwKrLc7" | jq -r '."access_token"')
+	-d "client_id=3f3bf203-aa91-xxxx-xxxx-1ae280xxxxe8" \
+	-d "client_secret=xxx=xxxxxxxx" | jq -r '."access_token"')
 
 	if [[ -n $access_token ]];
 	then
