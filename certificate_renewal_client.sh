@@ -3,8 +3,8 @@
 HOST=`hostname`
 LOGPATH="/home/postgres/logs/"
 LOGFILE="/home/postgres/logs/cert_lifecycle.log"
-FROM_ADDR="postgres@lowes.com"
-MAILADDR="chinmay.kr@lowes.com"
+FROM_ADDR="postgres@xxxxx.com"
+MAILADDR="chinmay.kr@xxxxx.com"
 
 log() {
   echo "[$(date +'%F %T')] $1" | tee -a $LOGFILE
